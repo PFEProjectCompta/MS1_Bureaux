@@ -1,0 +1,9 @@
+package com.ges.officeservice.repository;
+
+import com.ges.officeservice.entities.AdmineBureau;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+@RepositoryRestResource
+public interface AdminBureauRepository extends JpaRepository<AdmineBureau,String> {
+}

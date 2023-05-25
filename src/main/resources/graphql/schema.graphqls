@@ -1,0 +1,44 @@
+type Query{
+    adminesBureauList:[BureauAdmine]
+    compteUtilisateurList:[CompteUtilisateur]
+    bureauList:[Bureau]
+}
+type BureauAdmine{
+    id : String,
+    nom: String ,
+    prenom: String,
+    email : String
+}
+type Bureau{
+    id :String ,
+    nom :String ,
+    adresse :String ,
+    ville :String ,
+    paye :String ,
+    numero_tele: String ,
+    email :String,
+    admine:BureauAdmine,
+    compteUtilisateurs: [CompteUtilisateur]
+}
+type Societe{
+    id :String ,
+    raison_social: String ,
+    activite :String ,
+    adresse: String,
+    compteUtilisateur: CompteUtilisateur
+}
+
+type CompteUtilisateur{
+    id: String,
+    nom :String ,
+    prenom: String ,
+    email :String ,
+    adresse: String ,
+    ville :String ,
+    pays :String ,
+    telephone: String ,
+    date_naissance : Float ,
+    actif : Boolean,
+    bureau: Bureau,
+    societes: [Societe]
+}
