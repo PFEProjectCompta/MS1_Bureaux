@@ -1,6 +1,9 @@
 package com.ges.officeservice;
 
 import com.ges.officeservice.config.InitialData;
+import com.ges.officeservice.entities.AdmineBureau;
+import com.ges.officeservice.entities.Bureau;
+import com.ges.officeservice.entities.CompteUtilisateur;
 import com.ges.officeservice.repository.AdminBureauRepository;
 import com.ges.officeservice.repository.BureauRepository;
 import com.ges.officeservice.repository.CompteUtilisateurRepository;

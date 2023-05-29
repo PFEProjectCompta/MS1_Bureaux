@@ -32,7 +32,7 @@ public class CompteUtilisateur {
     @Column(name = "telephone")
     private String telephone;
     @Column(name = "date_naissance")
-    private Date date_naissance;
+    private String date_naissance;
     @Column(name = "actif")
     private boolean actif;
 
@@ -41,6 +41,6 @@ public class CompteUtilisateur {
     @JoinColumn(name = "bureau")
     private Bureau bureau;
 
-    @OneToMany( mappedBy = "compteUtilisateur")
+    @OneToMany( mappedBy = "compteUtilisateur",cascade = CascadeType.REMOVE)
     private List<Societe> societes;
 }

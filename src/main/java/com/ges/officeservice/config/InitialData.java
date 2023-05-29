@@ -11,6 +11,8 @@ import com.ges.officeservice.repository.SocieteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -79,7 +81,7 @@ public class InitialData {
                     .ville(String.format("ville %s", j))
                     .pays(String.format("$$Paye%s", j * j))
                     .telephone(String.format(" %s", j * random.nextInt(888)))
-                    .date_naissance(Generators.generateRandomDate())
+                    .date_naissance(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString())
                     .actif(Math.random() > 0.17 ? true : false)
                     .bureau(bu)
                     .build();

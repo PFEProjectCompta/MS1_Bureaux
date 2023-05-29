@@ -1,13 +1,41 @@
 type Query{
+# Query de "BureauAdmine"
     adminesBureauList:[BureauAdmine]
-    compteUtilisateurList:[CompteUtilisateur]
+    admineById(id:String):BureauAdmine
+# Query de "Bureau"
     bureauList:[Bureau]
+    bureauById(id:String):Bureau
+# Query de "CompteUtilisateur"
+    compteUtilisateurList:[CompteUtilisateur]
+    compteUtilisateurById(id:String):CompteUtilisateur
+# Query de "Societe"
+    societeList:[Societe]
+    societeById(id:String):Societe
+}
+type Mutation{
+# Mutation de "BureauAdmine"
+    ajouterBureauAdmine(admineBureauDTO:AdmineBureauDTO):BureauAdmine
+    modifierBureauAdmine(admineBureauDTO:AdmineBureauDTO,id:String):BureauAdmine
+    supprimerBureauAdmine(id:String):BureauAdmine
+# Mutation de "Bureau"
+    ajouterBureau(bureauDTO:BureauDTO):Bureau
+    modifierBureau(bureauDTO:BureauDTO,id:String):Bureau
+    supprimerBureau(id:String):Bureau
+# Mutation de "CompteUtilisateur"
+    ajouterCompteUtilisateur(compteUtilisateurDTO:CompteUtilisateurDTO):CompteUtilisateur
+    modifierCompteUtilisateur(compteUtilisateurDTO:CompteUtilisateurDTO,id:String):CompteUtilisateur
+    supprimerCompteUtilisateur(id:String):CompteUtilisateur
+# Mutation de "Societe"
+    ajouterSociete(societeDTO:SocieteDTO):Societe
+    modifierSociete(societeDTO:SocieteDTO,id:String):Societe
+    supprimerSociete(id:String):Societe
 }
 type BureauAdmine{
     id : String,
     nom: String ,
     prenom: String,
-    email : String
+    email : String,
+    bureaus:[Bureau]
 }
 type Bureau{
     id :String ,
@@ -20,13 +48,6 @@ type Bureau{
     admine:BureauAdmine,
     compteUtilisateurs: [CompteUtilisateur]
 }
-type Societe{
-    id :String ,
-    raison_social: String ,
-    activite :String ,
-    adresse: String,
-    compteUtilisateur: CompteUtilisateur
-}
 
 type CompteUtilisateur{
     id: String,
@@ -37,8 +58,49 @@ type CompteUtilisateur{
     ville :String ,
     pays :String ,
     telephone: String ,
-    date_naissance : Float ,
+    date_naissance : String ,
     actif : Boolean,
     bureau: Bureau,
     societes: [Societe]
+}
+type Societe{
+    id :String ,
+    raison_social: String ,
+    activite :String ,
+    adresse: String,
+    compteUtilisateur: CompteUtilisateur
+}
+
+
+input AdmineBureauDTO{
+    nom: String ,
+    prenom: String ,
+    email: String
+}
+input BureauDTO{
+    nom :String ,
+    adresse: String ,
+    ville :String ,
+    paye :String ,
+    numero_tele: String ,
+    email :String ,
+    admineId: String
+}
+input CompteUtilisateurDTO{
+    nom :String ,
+    prenom :String ,
+    email :String
+    adresse: String ,
+    ville :String ,
+    pays :String ,
+    telephone: String ,
+    date_naissance: String ,
+    actif :Boolean ,
+    bureauId :String
+}
+input SocieteDTO{
+    raison_social: String ,
+    activite :String ,
+    adresse :String ,
+    compteUtilisateurId :String
 }

@@ -27,8 +27,7 @@ public class Bureau {
     private String numero_tele;
     @Column(name = "email")
     private String email;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "bureau")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "bureau",cascade = CascadeType.REMOVE)
     private List<CompteUtilisateur> compteUtilisateurs;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne //(fetch = FetchType.EAGER)

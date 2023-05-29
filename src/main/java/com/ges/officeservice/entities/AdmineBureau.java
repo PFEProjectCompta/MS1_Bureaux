@@ -21,6 +21,6 @@ public class AdmineBureau {
     private String prenom;
     @Column(name = "email")
     private String email;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "admine")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "admine",cascade = CascadeType.REMOVE)
     private List<Bureau> bureaus;
 }
