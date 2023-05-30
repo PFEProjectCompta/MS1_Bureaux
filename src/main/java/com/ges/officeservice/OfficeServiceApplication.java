@@ -13,6 +13,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
@@ -45,5 +48,21 @@ public class OfficeServiceApplication {
 		};
 	};
 
+	@Bean
+	public InMemoryUserDetailsManager userDetailsManager() {
 
+		UserDetails user = User.withDefaultPasswordEncoder() // (1)
+				.username("user")
+				.password("password")
+				.roles("USER")
+				.build();
+
+		UserDetails admin = User.withDefaultPasswordEncoder() // (2)
+				.username("admin")
+				.password("password")
+				.roles("USER","ADMIN")
+				.build();
+
+		return new InMemoryUserDetailsManager(user, admin); // (3)
+	}
 }
