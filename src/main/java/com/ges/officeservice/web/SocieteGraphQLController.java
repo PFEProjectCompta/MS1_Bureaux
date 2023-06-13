@@ -2,6 +2,7 @@ package com.ges.officeservice.web;
 
 import com.ges.officeservice.dto.SocieteDTO;
 import com.ges.officeservice.entities.Societe;
+import com.ges.officeservice.kafka.SocieteProducer;
 import com.ges.officeservice.repository.CompteUtilisateurRepository;
 import com.ges.officeservice.repository.SocieteRepository;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -16,10 +17,12 @@ import java.util.UUID;
 public class SocieteGraphQLController {
     private SocieteRepository societeRepository;
     private CompteUtilisateurRepository compteUtilisateurRepository;
+    private SocieteProducer societeProducer;
 
-    public SocieteGraphQLController(SocieteRepository societeRepository, CompteUtilisateurRepository compteUtilisateurRepository) {
+    public SocieteGraphQLController(SocieteRepository societeRepository, CompteUtilisateurRepository compteUtilisateurRepository, SocieteProducer societeProducer) {
         this.societeRepository = societeRepository;
         this.compteUtilisateurRepository = compteUtilisateurRepository;
+        this.societeProducer = societeProducer;
     }
     @QueryMapping
     public List<Societe> societeList(){
@@ -38,6 +41,7 @@ public class SocieteGraphQLController {
                 .adresse(societeDTO.getAdresse())
                 .compteUtilisateur(compteUtilisateurRepository.findById(societeDTO.getCompteUtilisateurId()).get())
                 .build();
+        societeProducer.sendMessage(societe);
         return societeRepository.save(societe);
     }
     @MutationMapping
@@ -47,12 +51,14 @@ public class SocieteGraphQLController {
         societe.setActivite(societeDTO.getActivite()==null?societe.getActivite():societeDTO.getActivite());
         societe.setAdresse(societeDTO.getAdresse()==null?societe.getAdresse():societeDTO.getAdresse());
         societe.setCompteUtilisateur(societeDTO.getCompteUtilisateurId()==null?societe.getCompteUtilisateur():compteUtilisateurRepository.findById(societeDTO.getCompteUtilisateurId()).get());
+        societeProducer.sendMessage(societe);
         return societeRepository.save(societe);
     }
     @MutationMapping
     public Societe supprimerSociete(@Argument String id){
         Societe societe=societeRepository.findById(id).get();
         societeRepository.delete(societe);
+        societeProducer.sendMessageDeletedSociete(societe);
         return societe;
     }
 }

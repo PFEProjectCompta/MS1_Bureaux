@@ -1,9 +1,11 @@
 package com.ges.officeservice.config;
 
+import com.base.basemodel.dto.SocieteDTOKafka;
 import com.ges.officeservice.entities.AdmineBureau;
 import com.ges.officeservice.entities.Bureau;
 import com.ges.officeservice.entities.CompteUtilisateur;
 import com.ges.officeservice.entities.Societe;
+import com.ges.officeservice.kafka.SocieteProducer;
 import com.ges.officeservice.repository.AdminBureauRepository;
 import com.ges.officeservice.repository.BureauRepository;
 import com.ges.officeservice.repository.CompteUtilisateurRepository;
@@ -12,24 +14,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 public class InitialData {
 
     private static AdminBureauRepository adminBureauRepository;
-    private static   SocieteRepository societeRepository;
+    private static SocieteRepository societeRepository;
     private static BureauRepository bureauRepository;
     private static CompteUtilisateurRepository compteUtilisateurRepository;
+    private static SocieteProducer societeProducer;
 
-    public InitialData(AdminBureauRepository adminBureauRepository,SocieteRepository societeRepository, BureauRepository bureauRepository, CompteUtilisateurRepository compteUtilisateurRepository) {
+    public InitialData(AdminBureauRepository adminBureauRepository, SocieteRepository societeRepository, BureauRepository bureauRepository, CompteUtilisateurRepository compteUtilisateurRepository, SocieteProducer societeProducer) {
         this.societeRepository = societeRepository;
         this.bureauRepository = bureauRepository;
         this.compteUtilisateurRepository = compteUtilisateurRepository;
         this.adminBureauRepository = adminBureauRepository;
+        this.societeProducer = societeProducer;
     }
     @Transactional
     public static void creeAdmineBureau(){
@@ -108,4 +109,11 @@ public class InitialData {
         });
 
     }
+    public static void addToKafka(){
+        List<Societe> societes=societeRepository.findAll();
+        for(int i=0;i<societes.size();i++){
+            societeProducer.sendMessage(societes.get(i));
+        }
+    }
+
 }

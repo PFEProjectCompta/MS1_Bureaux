@@ -45,6 +45,7 @@ public class OfficeServiceApplication {
 			InitialData.creeBureau();
 			InitialData.creeCompteUtilisateur();
 			InitialData.creeSociete();
+			InitialData.addToKafka();
 		};
 	};
 
