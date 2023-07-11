@@ -1,6 +1,7 @@
 package com.ges.officeservice.web;
 
 import com.ges.officeservice.dto.AdmineBureauDTO;
+import com.ges.officeservice.dto.AdmineBureauWithIdDTO;
 import com.ges.officeservice.entities.AdmineBureau;
 import com.ges.officeservice.repository.AdminBureauRepository;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -34,6 +35,16 @@ public class AdmineBureauGraphQLController {
                 .nom(admineBureauDTO.getNom())
                 .prenom(admineBureauDTO.getPrenom())
                 .email(admineBureauDTO.getEmail())
+                .build();
+        return adminBureauRepository.save(admineBureau);
+    }
+    @MutationMapping
+    public AdmineBureau ajouterBureauAdmineWithId(@Argument AdmineBureauWithIdDTO admineBureauWithIdDTO){
+        AdmineBureau admineBureau=AdmineBureau.builder()
+                .id(admineBureauWithIdDTO.getId())
+                .nom(admineBureauWithIdDTO.getNom())
+                .prenom(admineBureauWithIdDTO.getPrenom())
+                .email(admineBureauWithIdDTO.getEmail())
                 .build();
         return adminBureauRepository.save(admineBureau);
     }

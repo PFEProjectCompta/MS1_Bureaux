@@ -1,10 +1,12 @@
 package com.ges.officeservice.web;
 
 import com.ges.officeservice.dto.CompteUtilisateurDTO;
+import com.ges.officeservice.dto.CompteUtilisateurDTOWithID;
 import com.ges.officeservice.entities.CompteUtilisateur;
 import com.ges.officeservice.repository.BureauRepository;
 import com.ges.officeservice.repository.CompteUtilisateurRepository;
 import com.ges.officeservice.repository.SocieteRepository;
+import com.ges.officeservice.services.CompteUtilisateurService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -18,15 +20,21 @@ public class CompteUtilisateurGraphQLController {
     private CompteUtilisateurRepository compteUtilisateurRepository;
     private SocieteRepository societeRepository;
     private BureauRepository bureauRepository;
-    public CompteUtilisateurGraphQLController(CompteUtilisateurRepository compteUtilisateurRepository, SocieteRepository societeRepository, BureauRepository bureauRepository) {
+    private CompteUtilisateurService compteUtilisateurService;
+    public CompteUtilisateurGraphQLController(CompteUtilisateurRepository compteUtilisateurRepository, SocieteRepository societeRepository, BureauRepository bureauRepository, CompteUtilisateurService compteUtilisateurService) {
         this.compteUtilisateurRepository = compteUtilisateurRepository;
         this.societeRepository = societeRepository;
         this.bureauRepository = bureauRepository;
+        this.compteUtilisateurService = compteUtilisateurService;
     }
 
     @QueryMapping
     public List<CompteUtilisateur> compteUtilisateurList(){
         return compteUtilisateurRepository.findAll();
+    }
+    @QueryMapping
+    public List<CompteUtilisateur> compteUtilisateurListByBureauId(@Argument String idBureau){
+        return compteUtilisateurService.allCompteUtilisateurByBureauId(idBureau);
     }
     @QueryMapping
     public CompteUtilisateur compteUtilisateurById(@Argument String id){
@@ -50,6 +58,23 @@ public class CompteUtilisateurGraphQLController {
         return compteUtilisateurRepository.save(compteUtilisateur);
     }
     @MutationMapping
+    public CompteUtilisateur ajouterCompteUtilisateurWithIdKeycloak(@Argument CompteUtilisateurDTOWithID compteUtilisateurDTOWithId){
+        CompteUtilisateur compteUtilisateur=CompteUtilisateur.builder()
+                .id(compteUtilisateurDTOWithId.getId())
+                .nom(compteUtilisateurDTOWithId.getNom())
+                .prenom(compteUtilisateurDTOWithId.getPrenom())
+                .email(compteUtilisateurDTOWithId.getEmail())
+                .adresse(compteUtilisateurDTOWithId.getAdresse())
+                .ville(compteUtilisateurDTOWithId.getVille())
+                .pays(compteUtilisateurDTOWithId.getPays())
+                .telephone(compteUtilisateurDTOWithId.getTelephone())
+                .date_naissance(compteUtilisateurDTOWithId.getDate_naissance())
+                .actif(compteUtilisateurDTOWithId.isActif())
+                .bureau(bureauRepository.findById(compteUtilisateurDTOWithId.getBureauId()).get())
+                .build();
+        return compteUtilisateurRepository.save(compteUtilisateur);
+    }
+    @MutationMapping
     public CompteUtilisateur modifierCompteUtilisateur(@Argument CompteUtilisateurDTO compteUtilisateurDTO,@Argument String id){
         CompteUtilisateur compteUtilisateur=compteUtilisateurRepository.findById(id).get();
         compteUtilisateur.setNom(compteUtilisateurDTO.getNom()==null? compteUtilisateur.getNom():compteUtilisateurDTO.getNom());
@@ -64,6 +89,7 @@ public class CompteUtilisateurGraphQLController {
         compteUtilisateur.setBureau(compteUtilisateurDTO.getBureauId()==null?compteUtilisateur.getBureau():bureauRepository.findById(compteUtilisateurDTO.getBureauId()).get());
         return compteUtilisateurRepository.save(compteUtilisateur);
     }
+
     @MutationMapping
     public CompteUtilisateur supprimerCompteUtilisateur(@Argument String id){
         CompteUtilisateur compteUtilisateur=compteUtilisateurRepository.findById(id).get();

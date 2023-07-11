@@ -11,4 +11,14 @@ public class SocieteDTO {
     private String activite;
     private String adresse;
     private String compteUtilisateurId;
+    private String ville;
+    private String pays;
+    private String devise;
+    private String forme_juridique;
+    private double capital;
+    private String telephone;
+    private String email;
+    private String site_internet;
+    private String num_dossier;
+    private String identifiant_TVA;
 }

@@ -41,11 +41,11 @@ public class OfficeServiceApplication {
 	@Transactional
 	CommandLineRunner start(){
 		return args -> {
-			InitialData.creeAdmineBureau();
-			InitialData.creeBureau();
-			InitialData.creeCompteUtilisateur();
-			InitialData.creeSociete();
-			InitialData.addToKafka();
+//			InitialData.creeAdmineBureau();
+//			InitialData.creeBureau();
+//			InitialData.creeCompteUtilisateur();
+//			InitialData.creeSociete();
+//			InitialData.addToKafka();
 		};
 	};
 
@@ -66,4 +66,5 @@ public class OfficeServiceApplication {
 
 		return new InMemoryUserDetailsManager(user, admin); // (3)
 	}
+
 }
