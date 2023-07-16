@@ -14,6 +14,10 @@ type Query{
     societeList:[Societe]
     societeByIdUtilisateur(idUtilisateur:String):[Societe]
     societeById(id:String):Societe
+
+#Members d'une societe
+    membersList(id:String):[SocieteMember]
+    membersListByMemberId(id:String):[SocieteMember]
 }
 type Mutation{
 # Mutation de "BureauAdmine"
@@ -34,6 +38,9 @@ type Mutation{
     ajouterSociete(societeDTO:SocieteDTO):Societe
     modifierSociete(societeDTO:SocieteDTO,id:String):Societe
     supprimerSociete(id:String):Societe
+#Members d'une societe
+    ajouterSocieteMember(societeMemberDTO:SocieteMemberDTO):SocieteMember
+    supprimerSocieteMember(id:String):SocieteMember
 }
 type BureauAdmine{
     id : String,
@@ -91,8 +98,17 @@ type Societe{
     num_dossier: String ,
     identifiant_TVA: String
 }
-
-
+type SocieteMember{
+    id :String ,
+    societe:Societe,
+    createur:CompteUtilisateur,
+    member:CompteUtilisateur
+}
+input SocieteMemberDTO{
+    id_societe: String ,
+    createur: String ,
+    member :String
+}
 input AdmineBureauDTO{
     nom: String ,
     prenom: String ,
@@ -147,3 +163,4 @@ input SocieteDTO{
     num_dossier: String ,
     identifiant_TVA: String
 }
+

@@ -10,6 +10,9 @@ import com.ges.officeservice.repository.SocieteRepository;
 import com.ges.officeservice.services.SocieteService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class SocieteController {
     private SocieteRepository societeRepository;
@@ -32,6 +35,18 @@ public class SocieteController {
         Societe societe=societeRepository.findById(idSociete).get();
         CompteUtilisateur compteUtilisateur=compteUtilisateurRepository.findById(societe.getCompteUtilisateur().getId()).get();
         return compteUtilisateur;
+    }
+
+    @GetMapping("/societesByIdUtilisateur/{idUtilisateur}")
+    public List<Societe> societesByIdUtilisateur(@PathVariable String idUtilisateur){
+        List<Societe> societeList=societeRepository.findAll();
+        List<Societe> societesByIdUtilisateur=new ArrayList<>();
+        for(int i=0;i<societeList.size();i++){
+            if(societeList.get(i).getCompteUtilisateur().getId().equals(idUtilisateur)){
+                societesByIdUtilisateur.add(societeList.get(i));
+            }
+        }
+        return societesByIdUtilisateur;
     }
     @PostMapping("/ajouterSociete")
     public Societe ajouterSociete(@RequestBody SocieteDTO societeDTO){
